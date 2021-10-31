@@ -1,0 +1,59 @@
+<detalle-producto *ngIf="productoSeleccionado" [producto]="productoSeleccionado"></detalle-producto>
+<div class="card border-primary mb-3">
+    <div class="card-header">Productos</div>
+    <div class="card-body text-primary">
+      <h5 class="card-title">Listado de Productos</h5>
+
+    <div class="my-2 text-left">
+
+      <button class="btn btn-rounded btn-primary" type="button" [routerLink]="['/productos/form']">Crear Producto</button>
+
+    </div> 
+    
+    <div *ngIf="productos?.length == 0" class="alert alert-info">
+          No Hay registros
+    </div>
+   
+   <table class="table table-bordered table-striped" *ngIf="productos?.length>0">
+       <thead>
+           <tr>
+               <th>Id</th>
+               <th>Nombre</th>
+               <th>Descripcion</th>
+               <th>Stock</th>
+               <th>Precio</th>
+               <th>Fecha</th>
+               <th>Editar</th>
+               <th>Eliminar</th>
+           </tr>
+       </thead>
+           <tr *ngFor="let producto of productos">
+              <td>
+                <img (click)="abrirModal(producto)" *ngIf="producto?.foto" src="http://localhost:8080/api/uploads/img/{{producto.foto}}" alt="{{producto.foto}}" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+                <img (click)="abrirModal(producto)" *ngIf="!producto?.foto" src="http://localhost:8080/images/not_producto.png" alt="Sin foto" class="img-thumbnail rounded" style="width: 64px; cursor: pointer;">
+              </td>
+              <td>{{producto.nombre}}</td>
+              <td>{{producto.descripcion}}</td>
+              <td>{{producto.stock}}</td>
+              <td>{{producto.precio}}</td>
+              <td>{{producto.createAt}}</td>
+              <td>
+                <button type="button" name="editar" [routerLink]="['/productos/form',producto.id]" 
+                class="btn btn-primary">Editar</button>
+              </td>
+              <td>
+                <button type="button" name="eliminar" (click)='delete(producto)' class="btn btn-danger">Eliminar</button>
+              </td>
+           </tr>
+       <tbody>
+
+       </tbody>
+   </table>
+
+   <paginator-nav *ngIf="paginador" [paginador]="paginador"></paginator-nav>
+   
+   
+   
+   
+    </div>
+  </div>
