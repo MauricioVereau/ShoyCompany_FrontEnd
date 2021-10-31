@@ -1,0 +1,101 @@
+<div class="card bg-dark text-white">
+
+    <div class="card-heder">{{titulo}}</div>
+    <div class="card-body">
+
+          <form #productoForm="ngForm">
+              <div class="form-group row">
+                  <label for="nombre" class="col-form-label col-sm-2">Nombre</label>
+                  <div class="col-sm-6">
+                      <input type="text" class="form-control" [(ngModel)]="producto.nombre" name="nombre" required minlength="4" #nombre="ngModel">
+                      <div class="aler alert-danger" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+                          <div *ngIf="nombre.errors.required">
+                               Nombre es Requerido
+                          </div>
+                          <div *ngIf="nombre.errors.minlength">
+                            Nombre debe tener al menos 4 caracteres
+                       </div>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="form-group row">
+                <label for="apellido" class="col-form-label col-sm-2">Descripcion</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="producto.descripcion" name="descripcion" required #descripcion="ngModel">
+                    <div class="aler alert-danger" *ngIf="descripcion.invalid && (descripcion.dirty || descripcion.touched)">
+                        <div *ngIf="descripcion.errors.required">
+                             Descripcion es Requerido
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="stock" class="col-form-label col-sm-2">Stock</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="producto.stock" name="stock" required #stock="ngModel">
+                    <div class="aler alert-danger" *ngIf="stock.invalid && (stock.dirty || stock.touched)">
+                        <div *ngIf="stock.errors.required">
+                             Stock es Requerido
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="precio" class="col-form-label col-sm-2">Precio</label>
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" [(ngModel)]="producto.precio" name="precio" required #precio="ngModel">
+                    <div class="aler alert-danger" *ngIf="precio.invalid && (precio.dirty || precio.touched)">
+                        <div *ngIf="precio.errors.required">
+                           Precio es Requerido
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="createAt" class="col-form-label col-sm-2">Fecha</label>
+                <div class="col-sm-6">
+                    <input type="date" class="form-control" [(ngModel)]="producto.createAt" name="createAt" required #createAt="ngModel">
+                    <div class="aler alert-danger" *ngIf="createAt.invalid && (createAt.dirty || createAt.touched)">
+                        <div *ngIf="createAt.errors.required">
+                             Selecciona Fecha
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="region" class="col-form-label col-sm-2">Tipo Producto</label>
+                <div class="col-sm-6">
+                    <select [compareWith]="compararTipo" class="form-control" [(ngModel)]="producto.tipoProducto" name="tipoProducto" style="width: 500px;" required #tipoProducto="ngModel">
+                        <option [ngValue]="undefined">Seleccione su Tipo</option>
+                        <option *ngFor="let tipoProducto of tiposProductos" [ngValue]="tipoProducto">{{tipoProducto.nombre}}</option>
+                    </select>
+                    <div class="aler alert-danger" *ngIf="tipoProducto.invalid && (tipoProducto.dirty || tipoProducto.touched)">
+                        <div *ngIf="tipoProducto.errors.required">
+                             Seleccione su Tipo
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="form-group row">
+                <div class="col-sm-6">
+                      <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!producto.id else elseBlock" [disabled]="!productoForm.form.valid">Crear</button>
+
+                      <ng-template #elseBlock>
+                        <button class="btn btn-primary" role="button" (click)="update()" [disabled]="!productoForm.form.valid">Editar</button>
+                      </ng-template>
+                      
+                </div>
+            </div>
+
+          </form>
+
+    </div>
+
+</div>
