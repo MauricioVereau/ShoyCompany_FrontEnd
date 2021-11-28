@@ -18,12 +18,12 @@ import { TipoProducto } from './tipoProducto';
     constructor(private productoService: ProductosService,private router : Router,
                 private activatedRoute:ActivatedRoute) { }
     ngOnInit(): void {
-      this.cargarCliente()
+      this.cargarProducto()
   
     }
   
   
-    cargarCliente():void{
+    cargarProducto():void{
       this.activatedRoute.params.subscribe(params =>{
         let id = params['id']
         if(id){
@@ -44,16 +44,24 @@ import { TipoProducto } from './tipoProducto';
            );
     } 
     
-    update():void{
+   /* update():void{
       this.productoService.update(this.producto)
       .subscribe(json =>  {
         this.router.navigate(['/productos'])
         swal.fire('Producto Actualizado',`${json.mensaje}: ${json.producto.nombre}`,'success')
-  
            }
            );
     }  
-    
+    */
+    update():void{
+      console.log(this.producto);
+      this.productoService.update(this.producto)
+      .subscribe(json =>  {
+        this.router.navigate(['/productos'])
+        swal.fire('Producto Actualizado',`${json.mensaje}: ${json.producto.nombre}`,'success')
+           }
+           );
+    }  
     
     compararTipo(o1:TipoProducto,o2:TipoProducto){
       if(o1 === undefined && o2 === undefined){

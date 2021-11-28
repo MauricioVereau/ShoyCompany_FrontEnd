@@ -4,6 +4,7 @@ import { ProductosService } from './productos.service';
 import { ActivatedRoute } from '@angular/router';
 import swal from 'sweetalert2';
 import { ModalService } from './detalle/modal.service';
+import { AuthService } from 'src/app/usuarios/auth.service';
 
 @Component({
   selector: 'app-productos',
@@ -16,7 +17,7 @@ export class ProductosComponent implements OnInit {
    productoSeleccionado:Producto;
 
   constructor(private productoService:ProductosService,private activatedRoute:ActivatedRoute,
-    private modalService:ModalService) { }
+    private modalService:ModalService,public authService:AuthService) { }
 
   ngOnInit(): void {
 
@@ -71,7 +72,6 @@ export class ProductosComponent implements OnInit {
               'Your file has been deleted.',
               'success'
             )
-
           }
         )
         
@@ -83,5 +83,6 @@ export class ProductosComponent implements OnInit {
     this.productoSeleccionado = producto;
     this.modalService.abrirModal();
   }
+
 
 }

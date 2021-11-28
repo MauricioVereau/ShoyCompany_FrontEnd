@@ -1,6 +1,5 @@
 import { NgModule ,LOCALE_ID} from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 
@@ -16,8 +15,8 @@ import { ListventasComponent } from './components/darshboard/listventas/listvent
 import { CarritoComponent } from './components/carrito/carrito.component';
 
 
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DetalleComponent } from './components/productos/detalle/detalle.component';
 import { FormComponent } from './components/productos/form.component';
 import { PaginatorComponent } from './components/paginator/paginator.component';
@@ -25,7 +24,29 @@ import { registerLocaleData } from '@angular/common';
 import localeES from '@angular/common/locales/es';
 import { ProductosService } from './components/productos/productos.service';
 import { LoginComponent } from './usuarios/login.component';
+import { TokenInterceptor } from './usuarios/interceptors/token.interceptor';
+import { AuthInterceptor } from './usuarios/interceptors/auth.interceptors';
+import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './usuarios/guards/auth.guard';
+import { RoleGuard } from './usuarios/guards/role.guard';
 registerLocaleData(localeES,'es');
+
+
+
+const routes: Routes = [
+  { path: 'home', component: HomeComponent},
+  { path: 'login', component: LoginComponent},
+  { path: 'lista', component: ProductosComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'carrito', component: CarritoComponent },
+  { path:'productos',component: ProductosComponent},
+  { path:'productos/page/:page',component: ProductosComponent},
+  { path: 'productos/form',component: FormComponent,canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
+  { path: 'productos/form/:id',component: FormComponent,canActivate:[AuthGuard,RoleGuard],data:{role: 'ROLE_ADMIN'}},
+  { path: '', pathMatch: 'full', redirectTo: 'home' },
+  { path: '**', pathMatch: 'full', redirectTo: 'home' },
+  
+];
 
 @NgModule({
   declarations: [
@@ -47,10 +68,14 @@ registerLocaleData(localeES,'es');
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    RouterModule.forRoot(routes),
+    ReactiveFormsModule
   ],
+  providers: [ProductosService,{provide: LOCALE_ID,useValue: 'es'},
+  {provide: HTTP_INTERCEPTORS,useClass:TokenInterceptor,multi:true},
+  {provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
